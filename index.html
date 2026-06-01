@@ -15,7 +15,7 @@
   --neutral: #f8fafc; --surface: #ffffff; --border: #e2e8f0;
   --text: #1e293b; --muted: #64748b;
   --green: #16a34a; --green-light: #dcfce7;
-  --radius: 16px; --shadow: 0 4px 24px rgba(0,0,0,0.09);
+  --shadow: 0 4px 24px rgba(0,0,0,0.09);
 }
 
 html, body {
@@ -23,181 +23,205 @@ html, body {
   font-family: 'Nunito', sans-serif;
   background: linear-gradient(135deg, #e0e7ff 0%, #f0fdf4 50%, #fef9c3 100%);
   color: var(--text);
-  overflow: hidden; /* no scroll during game */
+  overflow: hidden;
   -webkit-text-size-adjust: 100%;
 }
 
-.screen { display: none; flex-direction: column; height: 100vh; width: 100%; }
+.screen { display: none; flex-direction: column; height: 100vh; width: 100%; overflow: hidden; }
 .screen.active { display: flex; }
 
 /* ══════════════════════════════
-   SETUP
+   SETUP — scrollable, fluid
 ══════════════════════════════ */
 #setup {
   overflow-y: auto;
-  padding: 1.25rem 1rem 2rem;
-  gap: 0.875rem;
+  padding: 1.5vh 1.5vw 2vh;
+  gap: 1vh;
   align-items: center;
 }
 
 .game-title {
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-size: clamp(1.2rem, 3.5vw, 3rem);
   text-align: center; color: var(--blue);
-  text-shadow: 3px 3px 0 var(--blue-light);
-  line-height: 1.1;
+  text-shadow: 2px 2px 0 var(--blue-light);
+  line-height: 1.1; flex-shrink: 0;
 }
-.game-subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+.game-subtitle {
+  text-align: center; color: var(--muted);
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  font-weight: 600; flex-shrink: 0;
+}
 
 .setup-teams {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  width: 100%; max-width: 720px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1vw; width: 100%; max-width: 900px; flex-shrink: 0;
 }
 
 .team-setup-card {
-  border-radius: 14px; padding: 0.9rem;
+  border-radius: clamp(8px, 1.5vw, 16px);
+  padding: clamp(0.6rem, 1.5vw, 1.2rem);
   box-shadow: var(--shadow);
-  display: flex; flex-direction: column; gap: 0.55rem;
+  display: flex; flex-direction: column;
+  gap: clamp(4px, 0.8vh, 10px);
 }
 .team-setup-card.blue { background: #eff6ff; border: 2px solid var(--blue-light); }
 .team-setup-card.red  { background: #fff5f5; border: 2px solid #fecaca; }
-.team-setup-card h2 { font-family: 'Fredoka One', cursive; font-size: 1.05rem; }
+.team-setup-card h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+}
 .team-setup-card.blue h2 { color: var(--blue); }
 .team-setup-card.red  h2 { color: var(--red); }
 .team-setup-card input[type=text] {
-  width: 100%; padding: 7px 10px; border-radius: 9px; border: 2px solid var(--border);
-  font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700;
-  background: white; color: var(--text); outline: none;
+  width: 100%;
+  padding: clamp(4px, 0.8vh, 8px) clamp(6px, 1vw, 12px);
+  border-radius: clamp(6px, 1vw, 10px);
+  border: 2px solid var(--border);
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  font-weight: 700; background: white; color: var(--text); outline: none;
 }
 .team-setup-card.blue input:focus { border-color: var(--blue); }
 .team-setup-card.red  input:focus { border-color: var(--red); }
 
-.setting-label  { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.op-group-label { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-top: 2px; }
+.setting-label  { font-size: clamp(0.55rem, 1vw, 0.72rem); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.op-group-label { font-size: clamp(0.5rem, 0.9vw, 0.65rem); font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-top: 1px; }
 
-.chip-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: clamp(2px, 0.4vw, 5px); }
 .chip {
-  padding: 4px 9px; border-radius: 999px; border: 2px solid var(--border);
+  padding: clamp(2px, 0.4vh, 5px) clamp(5px, 0.8vw, 10px);
+  border-radius: 999px; border: 2px solid var(--border);
   background: white; color: var(--muted);
-  font-size: 0.7rem; font-weight: 700;
+  font-size: clamp(0.6rem, 1.1vw, 0.8rem); font-weight: 700;
   cursor: pointer; transition: all 0.15s; white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
 .chip.active.blue-chip { border-color: var(--blue); background: var(--blue); color: white; }
 .chip.active.red-chip  { border-color: var(--red);  background: var(--red);  color: white; }
-.ops-section { display: flex; flex-direction: column; gap: 5px; }
+.ops-section { display: flex; flex-direction: column; gap: clamp(3px, 0.5vh, 7px); }
 
 .global-card {
-  background: var(--surface); border-radius: 14px;
-  padding: 0.9rem 1rem; box-shadow: var(--shadow);
-  width: 100%; max-width: 720px;
+  background: var(--surface);
+  border-radius: clamp(8px, 1.5vw, 16px);
+  padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.75rem, 1.5vw, 1.25rem);
+  box-shadow: var(--shadow); width: 100%; max-width: 900px; flex-shrink: 0;
 }
-.global-card h3 { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.6rem; }
-.rounds-row { display: flex; align-items: center; gap: 10px; }
-.rounds-row label { font-size: 0.85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.global-card h3 {
+  font-size: clamp(0.55rem, 1vw, 0.72rem); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  margin-bottom: clamp(4px, 0.8vh, 10px);
+}
+.rounds-row { display: flex; align-items: center; gap: clamp(6px, 1vw, 12px); }
+.rounds-row label { font-size: clamp(0.72rem, 1.3vw, 0.9rem); font-weight: 700; color: var(--muted); white-space: nowrap; }
 .rounds-row input[type=number] {
-  width: 76px; padding: 6px 8px; border-radius: 9px; border: 2px solid var(--border);
-  font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
-  color: var(--text); background: white; text-align: center; outline: none;
+  width: clamp(56px, 7vw, 80px);
+  padding: clamp(4px, 0.6vh, 8px);
+  border-radius: clamp(6px, 1vw, 10px); border: 2px solid var(--border);
+  font-family: 'Nunito', sans-serif; font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  font-weight: 800; color: var(--text); background: white; text-align: center; outline: none;
 }
 .rounds-row input[type=number]:focus { border-color: var(--blue); }
-.rounds-hint { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+.rounds-hint { font-size: clamp(0.6rem, 1vw, 0.78rem); color: var(--muted); font-weight: 600; }
 
 .start-btn {
-  width: 100%; max-width: 720px; padding: 15px; border-radius: var(--radius); border: none;
+  width: 100%; max-width: 900px;
+  padding: clamp(10px, 1.8vh, 18px);
+  border-radius: clamp(10px, 1.5vw, 16px); border: none;
   background: var(--blue); color: white;
-  font-family: 'Fredoka One', cursive; font-size: 1.3rem;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   cursor: pointer; box-shadow: 0 4px 16px rgba(37,99,235,0.35);
-  transition: transform 0.12s, box-shadow 0.12s;
+  transition: transform 0.12s; flex-shrink: 0;
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 .start-btn:active { transform: scale(0.97); }
 
 /* ══════════════════════════════
-   GAME
+   GAME — alles passt in den Screen, kein Scroll
 ══════════════════════════════ */
-#game { flex-direction: column; }
+#game { flex-direction: column; overflow: hidden; }
 
-/* Top bar */
 .game-topbar {
   background: white;
-  padding: 0.5rem 0.875rem 0.35rem;
+  padding: clamp(4px, 0.8vh, 10px) clamp(8px, 1.5vw, 16px) clamp(3px, 0.5vh, 8px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  display: flex; flex-direction: column; gap: 3px;
+  display: flex; flex-direction: column;
+  gap: clamp(2px, 0.4vh, 6px);
   flex-shrink: 0;
 }
-.topbar-row {
-  display: flex; justify-content: space-between; align-items: center;
-}
+.topbar-row { display: flex; justify-content: space-between; align-items: center; }
 
-/* icon buttons */
 .icon-btn {
-  display: flex; align-items: center; gap: 5px;
-  padding: 5px 10px; border-radius: 9px; border: 1.5px solid var(--border);
+  display: flex; align-items: center; gap: 4px;
+  padding: clamp(4px, 0.6vh, 8px) clamp(6px, 1vw, 12px);
+  border-radius: clamp(6px, 1vw, 10px); border: 1.5px solid var(--border);
   background: var(--neutral); color: var(--muted);
-  font-size: 0.72rem; font-weight: 800;
-  cursor: pointer; touch-action: manipulation;
+  font-size: clamp(0.6rem, 1.1vw, 0.78rem); font-weight: 800;
+  cursor: pointer; touch-action: manipulation; white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
 }
 .icon-btn:active { background: var(--border); }
-.icon-btn .ico { font-size: 0.9rem; }
 
-.score-block { display: flex; flex-direction: column; align-items: center; min-width: 80px; }
-.score-name { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
-.score-pts  { font-family: 'Fredoka One', cursive; font-size: 1.4rem; line-height: 1; }
+.score-block { display: flex; flex-direction: column; align-items: center; }
+.score-name {
+  font-size: clamp(0.55rem, 1.1vw, 0.78rem);
+  font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.score-pts { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 2.5vw, 1.8rem); line-height: 1; }
 .score-name.blue { color: var(--blue); }
 .score-pts.blue  { color: var(--blue); }
 .score-name.red  { color: var(--red); }
 .score-pts.red   { color: var(--red); }
 
-.round-counter { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-align: center; }
+.round-counter { font-size: clamp(0.55rem, 1vw, 0.72rem); font-weight: 700; color: var(--muted); text-align: center; }
 
-.rope-wrap { height: 44px; }
-canvas#rope { display: block; width: 100%; height: 44px; }
-.win-info { text-align: center; font-size: 0.6rem; font-weight: 700; color: var(--muted); }
+.rope-wrap { height: clamp(32px, 5vh, 48px); flex-shrink: 0; }
+canvas#rope { display: block; width: 100%; height: 100%; }
+.win-info { text-align: center; font-size: clamp(0.5rem, 0.9vw, 0.65rem); font-weight: 700; color: var(--muted); }
 
-/* Panels */
+/* Panels fill remaining space exactly */
 .panels {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 0;
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 0; overflow: hidden;
 }
 
 .panel {
   display: flex; flex-direction: column;
-  padding: 0.5rem 0.5rem 0.6rem;
-  gap: 0.4rem;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 0;
+  padding: clamp(4px, 1vh, 12px) clamp(4px, 1vw, 10px);
+  gap: clamp(4px, 0.8vh, 10px);
+  align-items: center; justify-content: space-evenly;
+  min-height: 0; overflow: hidden;
 }
 .panel.blue { background: #eff6ff; border-right: 2px solid var(--border); }
 .panel.red  { background: #fff5f5; }
 
-.panel-title { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; flex-shrink: 0; }
+.panel-title {
+  font-size: clamp(0.55rem, 1.1vw, 0.78rem);
+  font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em;
+  flex-shrink: 0;
+}
 .panel.blue .panel-title { color: var(--blue); }
 .panel.red  .panel-title { color: var(--red); }
 
 .q-text {
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(1.5rem, 4.5vw, 2.8rem);
+  font-size: clamp(1.4rem, 4vw, 3.5rem);
   text-align: center; color: var(--text); line-height: 1.15;
   flex-shrink: 0;
 }
 
 .ans-box {
-  width: 100%; padding: 5px 4px; border-radius: 10px; border: 3px solid var(--border);
+  width: 100%;
+  padding: clamp(4px, 0.8vh, 8px);
+  border-radius: clamp(6px, 1vw, 12px); border: 3px solid var(--border);
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-size: clamp(1.1rem, 2.8vw, 2.2rem);
   text-align: center; background: white; color: var(--text);
-  min-height: 44px; display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   transition: border-color 0.2s, background 0.2s;
-  flex-shrink: 0;
+  flex-shrink: 0; min-height: 0;
 }
 .ans-box.blue-active { border-color: var(--blue); background: var(--blue-light); }
 .ans-box.red-active  { border-color: var(--red);  background: var(--red-light); }
@@ -205,32 +229,37 @@ canvas#rope { display: block; width: 100%; height: 44px; }
 .ans-box.wrong   { border-color: var(--red); background: var(--red-light); animation: shake 0.3s; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
-/* Numpad — bigger touch targets for iPad */
-.numpad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(4px, 1vw, 8px);
+/* Numpad scales to fill available space */
+.numpad-wrap {
+  flex: 1; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
   width: 100%;
-  max-width: 240px;
-  flex-shrink: 0;
+}
+.numpad {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(3px, 0.6vw, 8px);
+  width: 100%;
+  /* max-width keeps it from getting absurdly wide on Smartboard */
+  max-width: min(100%, 280px);
+  aspect-ratio: 3/4;
 }
 .nb {
-  aspect-ratio: 1;
-  border-radius: 10px; border: 2px solid var(--border);
+  border-radius: clamp(6px, 1vw, 12px); border: 2px solid var(--border);
   background: white; color: var(--text);
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-size: clamp(0.9rem, 2.2vw, 2rem);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: transform 0.1s, background 0.1s;
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   user-select: none; -webkit-user-select: none;
+  width: 100%; height: 100%;
 }
 .nb:active { transform: scale(0.90); background: var(--neutral); }
-.nb.del { font-size: clamp(0.8rem, 2vw, 1.1rem); color: var(--muted); }
+.nb.del { font-size: clamp(0.75rem, 1.6vw, 1.4rem); color: var(--muted); }
 .nb.ok  {
   color: white; border: none;
-  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  font-size: clamp(0.65rem, 1.4vw, 1.1rem);
   font-family: 'Nunito', sans-serif; font-weight: 800;
 }
 .nb.ok.blue { background: var(--blue); }
@@ -241,33 +270,37 @@ canvas#rope { display: block; width: 100%; height: 44px; }
 ══════════════════════════════ */
 #result {
   flex-direction: column; align-items: center; justify-content: center;
-  padding: 2rem 1.25rem; gap: 1.25rem; text-align: center;
+  padding: 2vh 2vw; gap: clamp(0.75rem, 2vh, 1.5rem); text-align: center;
+  overflow: hidden;
 }
-.trophy { font-size: clamp(3rem, 8vw, 5rem); }
-.winner-label { font-size: 1rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-.winner-name  { font-family: 'Fredoka One', cursive; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.1; }
+.trophy { font-size: clamp(2.5rem, 7vw, 5rem); }
+.winner-label { font-size: clamp(0.75rem, 1.5vw, 1rem); font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.winner-name  { font-family: 'Fredoka One', cursive; font-size: clamp(1.8rem, 5vw, 3.5rem); line-height: 1.1; }
 .winner-name.blue { color: var(--blue); }
 .winner-name.red  { color: var(--red); }
 .winner-name.tie  { color: var(--text); }
-.result-reason { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+.result-reason { font-size: clamp(0.75rem, 1.3vw, 0.95rem); color: var(--muted); font-weight: 600; }
 
-.score-cards { display: flex; gap: 1rem; }
+.score-cards { display: flex; gap: clamp(0.5rem, 1.5vw, 1.25rem); }
 .score-card {
-  background: white; border-radius: 16px; padding: 1.25rem 2rem;
+  background: white; border-radius: clamp(10px, 1.5vw, 16px);
+  padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
   box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-.score-card .sc-pts  { font-family: 'Fredoka One', cursive; font-size: 2.5rem; }
-.score-card .sc-name { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.score-card .sc-pts  { font-family: 'Fredoka One', cursive; font-size: clamp(1.8rem, 4vw, 3rem); }
+.score-card .sc-name { font-size: clamp(0.65rem, 1.1vw, 0.85rem); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .score-card.blue .sc-pts { color: var(--blue); }
 .score-card.red  .sc-pts { color: var(--red); }
 .score-card.winner.blue { box-shadow: 0 0 0 3px var(--blue), var(--shadow); }
 .score-card.winner.red  { box-shadow: 0 0 0 3px var(--red),  var(--shadow); }
 
-.result-btns { display: flex; gap: 0.75rem; }
+.result-btns { display: flex; gap: clamp(0.4rem, 1vw, 0.75rem); }
 .result-btn {
-  padding: 13px 28px; border-radius: var(--radius); border: 2px solid var(--border);
+  padding: clamp(8px, 1.5vh, 15px) clamp(14px, 2.5vw, 30px);
+  border-radius: clamp(8px, 1.2vw, 14px); border: 2px solid var(--border);
   background: white; color: var(--text);
-  font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.75rem, 1.3vw, 1rem); font-weight: 800;
   cursor: pointer; transition: all 0.15s;
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
@@ -282,18 +315,22 @@ canvas#rope { display: block; width: 100%; height: 44px; }
 }
 .overlay.active { display: flex; }
 .overlay-card {
-  background: white; border-radius: 20px; padding: 1.75rem 2rem;
+  background: white; border-radius: clamp(12px, 2vw, 20px);
+  padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-  display: flex; flex-direction: column; align-items: center; gap: 1rem;
-  text-align: center; max-width: 320px; width: 90%;
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(0.5rem, 1.5vh, 1rem);
+  text-align: center; max-width: clamp(260px, 40vw, 360px); width: 90%;
 }
-.overlay-card h3 { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--text); }
-.overlay-card p  { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
-.overlay-btns { display: flex; gap: 0.75rem; width: 100%; }
+.overlay-card h3 { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text); }
+.overlay-card p  { font-size: clamp(0.75rem, 1.2vw, 0.9rem); color: var(--muted); font-weight: 600; }
+.overlay-btns { display: flex; gap: clamp(6px, 1vw, 12px); width: 100%; }
 .overlay-btn {
-  flex: 1; padding: 11px; border-radius: 12px; border: 2px solid var(--border);
+  flex: 1; padding: clamp(8px, 1.2vh, 13px);
+  border-radius: clamp(8px, 1vw, 12px); border: 2px solid var(--border);
   background: white; color: var(--text);
-  font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.72rem, 1.1vw, 0.9rem); font-weight: 800;
   cursor: pointer; touch-action: manipulation;
 }
 .overlay-btn.confirm { background: var(--red); border-color: var(--red); color: white; }
@@ -307,7 +344,6 @@ canvas#rope { display: block; width: 100%; height: 44px; }
   <p class="game-subtitle">Beide Teams rechnen gleichzeitig — wer zieht gewinnt!</p>
 
   <div class="setup-teams">
-    <!-- BLAU -->
     <div class="team-setup-card blue">
       <h2>🔵 Team 1</h2>
       <input type="text" id="name-blue" value="Team Blau" maxlength="10">
@@ -344,7 +380,6 @@ canvas#rope { display: block; width: 100%; height: 44px; }
       </div>
     </div>
 
-    <!-- ROT -->
     <div class="team-setup-card red">
       <h2>🔴 Team 2</h2>
       <input type="text" id="name-red" value="Team Rot" maxlength="10">
@@ -398,71 +433,68 @@ canvas#rope { display: block; width: 100%; height: 44px; }
 <div class="screen" id="game">
   <div class="game-topbar">
     <div class="topbar-row">
-      <!-- Blau score -->
       <div class="score-block">
         <span class="score-name blue" id="hdr-blue">Team Blau</span>
         <span class="score-pts blue" id="pts-blue">0</span>
       </div>
-
-      <!-- Center controls -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
         <div style="display:flex;gap:6px">
-          <button class="icon-btn" id="back-btn"><span class="ico">⚙️</span> Einstellungen</button>
-          <button class="icon-btn" id="restart-btn"><span class="ico">🔄</span> Neustart</button>
+          <button class="icon-btn" id="back-btn">⚙️ Einstellungen</button>
+          <button class="icon-btn" id="restart-btn">🔄 Neustart</button>
         </div>
         <span class="round-counter" id="round-counter">Runde 0 / 20</span>
       </div>
-
-      <!-- Rot score -->
       <div class="score-block">
         <span class="score-name red" id="hdr-red">Team Rot</span>
         <span class="score-pts red" id="pts-red">0</span>
       </div>
     </div>
-    <div class="rope-wrap"><canvas id="rope" height="44"></canvas></div>
+    <div class="rope-wrap"><canvas id="rope"></canvas></div>
     <div class="win-info">6 Felder Vorsprung oder max. Runden = Sieg 🏆</div>
   </div>
 
   <div class="panels">
-    <!-- BLUE -->
     <div class="panel blue">
       <div class="panel-title" id="pt-blue">Team Blau</div>
       <div class="q-text" id="q-blue">?</div>
       <div class="ans-box blue-active" id="ans-blue">_</div>
-      <div class="numpad">
-        <button class="nb" data-team="0" data-n="7">7</button>
-        <button class="nb" data-team="0" data-n="8">8</button>
-        <button class="nb" data-team="0" data-n="9">9</button>
-        <button class="nb" data-team="0" data-n="4">4</button>
-        <button class="nb" data-team="0" data-n="5">5</button>
-        <button class="nb" data-team="0" data-n="6">6</button>
-        <button class="nb" data-team="0" data-n="1">1</button>
-        <button class="nb" data-team="0" data-n="2">2</button>
-        <button class="nb" data-team="0" data-n="3">3</button>
-        <button class="nb del" data-team="0" data-action="del">⌫</button>
-        <button class="nb" data-team="0" data-n="0">0</button>
-        <button class="nb ok blue" data-team="0" data-action="ok">OK ✓</button>
+      <div class="numpad-wrap">
+        <div class="numpad">
+          <button class="nb" data-team="0" data-n="7">7</button>
+          <button class="nb" data-team="0" data-n="8">8</button>
+          <button class="nb" data-team="0" data-n="9">9</button>
+          <button class="nb" data-team="0" data-n="4">4</button>
+          <button class="nb" data-team="0" data-n="5">5</button>
+          <button class="nb" data-team="0" data-n="6">6</button>
+          <button class="nb" data-team="0" data-n="1">1</button>
+          <button class="nb" data-team="0" data-n="2">2</button>
+          <button class="nb" data-team="0" data-n="3">3</button>
+          <button class="nb del" data-team="0" data-action="del">⌫</button>
+          <button class="nb" data-team="0" data-n="0">0</button>
+          <button class="nb ok blue" data-team="0" data-action="ok">OK ✓</button>
+        </div>
       </div>
     </div>
 
-    <!-- RED -->
     <div class="panel red">
       <div class="panel-title" id="pt-red">Team Rot</div>
       <div class="q-text" id="q-red">?</div>
       <div class="ans-box red-active" id="ans-red">_</div>
-      <div class="numpad">
-        <button class="nb" data-team="1" data-n="7">7</button>
-        <button class="nb" data-team="1" data-n="8">8</button>
-        <button class="nb" data-team="1" data-n="9">9</button>
-        <button class="nb" data-team="1" data-n="4">4</button>
-        <button class="nb" data-team="1" data-n="5">5</button>
-        <button class="nb" data-team="1" data-n="6">6</button>
-        <button class="nb" data-team="1" data-n="1">1</button>
-        <button class="nb" data-team="1" data-n="2">2</button>
-        <button class="nb" data-team="1" data-n="3">3</button>
-        <button class="nb del" data-team="1" data-action="del">⌫</button>
-        <button class="nb" data-team="1" data-n="0">0</button>
-        <button class="nb ok red" data-team="1" data-action="ok">OK ✓</button>
+      <div class="numpad-wrap">
+        <div class="numpad">
+          <button class="nb" data-team="1" data-n="7">7</button>
+          <button class="nb" data-team="1" data-n="8">8</button>
+          <button class="nb" data-team="1" data-n="9">9</button>
+          <button class="nb" data-team="1" data-n="4">4</button>
+          <button class="nb" data-team="1" data-n="5">5</button>
+          <button class="nb" data-team="1" data-n="6">6</button>
+          <button class="nb" data-team="1" data-n="1">1</button>
+          <button class="nb" data-team="1" data-n="2">2</button>
+          <button class="nb" data-team="1" data-n="3">3</button>
+          <button class="nb del" data-team="1" data-action="del">⌫</button>
+          <button class="nb" data-team="1" data-n="0">0</button>
+          <button class="nb ok red" data-team="1" data-action="ok">OK ✓</button>
+        </div>
       </div>
     </div>
   </div>
@@ -490,7 +522,7 @@ canvas#rope { display: block; width: 100%; height: 44px; }
   </div>
 </div>
 
-<!-- ══ CONFIRM OVERLAY ══ -->
+<!-- ══ OVERLAY ══ -->
 <div class="overlay" id="overlay">
   <div class="overlay-card">
     <h3 id="overlay-title">Spiel beenden?</h3>
@@ -508,24 +540,18 @@ function show(id) {
   document.getElementById(id).classList.add('active');
 }
 
-// ── Settings ──
 const teamSettings = [
   { ops: ['add','sub'], range: 10, carry: 'no', tables: 'easy' },
   { ops: ['add','sub'], range: 10, carry: 'no', tables: 'easy' }
 ];
 let teamNames = ['Team Blau', 'Team Rot'];
 let maxRounds = 20;
+let ropePos = 0;
+let scores = [0,0], totalRounds = 0;
+let answers = [null,null], inputs = ['',''];
+let locked = [false,false], gameOver = false;
 
-// Game state
-let ropePos = 0; // negative=left(blue), positive=right(red)
-let scores = [0,0];
-let totalRounds = 0;
-let answers = [null,null];
-let inputs = ['',''];
-let locked = [false,false];
-let gameOver = false;
-
-// ── Chip interactions ──
+// Chips
 function singleSelect(chips) {
   chips.forEach(c => c.addEventListener('click', () => {
     chips.forEach(x => x.classList.remove('active'));
@@ -533,281 +559,212 @@ function singleSelect(chips) {
     updateSettings(parseInt(c.dataset.team));
   }));
 }
-
 document.querySelectorAll('.chip[data-type="op"]').forEach(chip => {
   chip.addEventListener('click', () => {
     const team = parseInt(chip.dataset.team);
     const wasActive = chip.classList.contains('active');
-    const allOps = [...document.querySelectorAll(`.chip[data-type="op"][data-team="${team}"]`)];
-    if (wasActive && allOps.filter(c => c.classList.contains('active')).length > 1) {
+    const all = [...document.querySelectorAll(`.chip[data-type="op"][data-team="${team}"]`)];
+    if (wasActive && all.filter(c => c.classList.contains('active')).length > 1)
       chip.classList.remove('active');
-    } else {
-      chip.classList.add('active');
-    }
+    else chip.classList.add('active');
     updateSettings(team);
   });
 });
-
 [0,1].forEach(t => {
   singleSelect([...document.querySelectorAll(`.chip[data-type="range"][data-team="${t}"]`)]);
   singleSelect([...document.querySelectorAll(`.chip[data-type="carry"][data-team="${t}"]`)]);
   singleSelect([...document.querySelectorAll(`.chip[data-type="tables"][data-team="${t}"]`)]);
 });
-
-function updateSettings(team) {
-  const ops = [...document.querySelectorAll(`.chip[data-type="op"][data-team="${team}"].active`)].map(c => c.dataset.val);
-  const r  = document.querySelector(`.chip[data-type="range"][data-team="${team}"].active`);
-  const c  = document.querySelector(`.chip[data-type="carry"][data-team="${team}"].active`);
-  const tb = document.querySelector(`.chip[data-type="tables"][data-team="${team}"].active`);
-  teamSettings[team].ops    = ops;
-  if (r)  teamSettings[team].range  = parseInt(r.dataset.val);
-  if (c)  teamSettings[team].carry  = c.dataset.val;
-  if (tb) teamSettings[team].tables = tb.dataset.val;
+function updateSettings(t) {
+  const ops = [...document.querySelectorAll(`.chip[data-type="op"][data-team="${t}"].active`)].map(c=>c.dataset.val);
+  const r  = document.querySelector(`.chip[data-type="range"][data-team="${t}"].active`);
+  const c  = document.querySelector(`.chip[data-type="carry"][data-team="${t}"].active`);
+  const tb = document.querySelector(`.chip[data-type="tables"][data-team="${t}"].active`);
+  teamSettings[t].ops = ops;
+  if (r)  teamSettings[t].range  = parseInt(r.dataset.val);
+  if (c)  teamSettings[t].carry  = c.dataset.val;
+  if (tb) teamSettings[t].tables = tb.dataset.val;
 }
 
-// ── Start ──
+// Start
 document.getElementById('start-btn').addEventListener('click', startGame);
-
 function startGame() {
   updateSettings(0); updateSettings(1);
   teamNames[0] = document.getElementById('name-blue').value || 'Team Blau';
   teamNames[1] = document.getElementById('name-red').value || 'Team Rot';
-  maxRounds = Math.max(4, parseInt(document.getElementById('max-rounds').value) || 20);
-
+  maxRounds = Math.max(4, parseInt(document.getElementById('max-rounds').value)||20);
   ['blue','red'].forEach((s,i) => {
     document.getElementById('hdr-'+s).textContent = teamNames[i];
     document.getElementById('pt-'+s).textContent  = teamNames[i];
   });
-
-  ropePos = 0; scores = [0,0]; totalRounds = 0;
-  inputs = ['','']; locked = [false,false]; gameOver = false;
+  ropePos=0; scores=[0,0]; totalRounds=0;
+  inputs=['','']; locked=[false,false]; gameOver=false;
   updateRoundCounter();
   show('game');
-  setTimeout(() => { drawRope(); newQuestion(0); newQuestion(1); }, 60);
+  setTimeout(()=>{ drawRope(); newQuestion(0); newQuestion(1); }, 60);
 }
 
-// ── Confirm overlay ──
+// Overlay
 let overlayAction = null;
-
 function showOverlay(title, msg, action) {
   overlayAction = action;
   document.getElementById('overlay-title').textContent = title;
   document.getElementById('overlay-msg').textContent   = msg;
   document.getElementById('overlay').classList.add('active');
 }
-document.getElementById('overlay-cancel').addEventListener('click', () => {
-  document.getElementById('overlay').classList.remove('active');
-});
-document.getElementById('overlay-confirm').addEventListener('click', () => {
+document.getElementById('overlay-cancel').addEventListener('click', ()=>document.getElementById('overlay').classList.remove('active'));
+document.getElementById('overlay-confirm').addEventListener('click', ()=>{
   document.getElementById('overlay').classList.remove('active');
   if (overlayAction) overlayAction();
 });
-
-// Back → Einstellungen
-document.getElementById('back-btn').addEventListener('click', () => {
+document.getElementById('back-btn').addEventListener('click', ()=>{
   if (gameOver) { show('setup'); return; }
-  showOverlay('Einstellungen öffnen?', 'Der aktuelle Spielstand geht verloren.', () => show('setup'));
+  showOverlay('Einstellungen öffnen?','Der aktuelle Spielstand geht verloren.',()=>show('setup'));
 });
-
-// Neustart (gleiche Einstellungen)
-document.getElementById('restart-btn').addEventListener('click', () => {
+document.getElementById('restart-btn').addEventListener('click', ()=>{
   if (gameOver) { startGame(); return; }
-  showOverlay('Neustart?', 'Das Spiel wird mit denselben Einstellungen neu gestartet.', () => startGame());
+  showOverlay('Neustart?','Das Spiel wird neu gestartet.',()=>startGame());
 });
+document.getElementById('result-setup-btn').addEventListener('click', ()=>show('setup'));
+document.getElementById('result-restart-btn').addEventListener('click', ()=>startGame());
 
-// Result buttons
-document.getElementById('result-setup-btn').addEventListener('click', () => show('setup'));
-document.getElementById('result-restart-btn').addEventListener('click', () => startGame());
-
-// ── Question gen ──
-function randInt(a,b) { return Math.floor(Math.random()*(b-a+1))+a; }
-const EASY_TABLES = [1,2,5,10];
-
-function genQuestion(team) {
-  const s = teamSettings[team];
-  const hasPM = s.ops.some(o => o==='add'||o==='sub');
-  const hasMD = s.ops.some(o => o==='mul'||o==='div');
-  let cat;
-  if (hasPM && hasMD) cat = Math.random()<0.5 ? 'pm' : 'md';
-  else if (hasPM) cat = 'pm';
-  else cat = 'md';
-
-  if (cat === 'pm') {
-    const pmOps = s.ops.filter(o => o==='add'||o==='sub');
-    return genPM(pmOps[Math.floor(Math.random()*pmOps.length)], s.range, s.carry);
+// Question gen
+function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+const EASY=[1,2,5,10];
+function genQuestion(team){
+  const s=teamSettings[team];
+  const hasPM=s.ops.some(o=>o==='add'||o==='sub');
+  const hasMD=s.ops.some(o=>o==='mul'||o==='div');
+  let cat = hasPM&&hasMD ? (Math.random()<0.5?'pm':'md') : hasPM?'pm':'md';
+  if(cat==='pm'){
+    const pmOps=s.ops.filter(o=>o==='add'||o==='sub');
+    return genPM(pmOps[Math.floor(Math.random()*pmOps.length)],s.range,s.carry);
   } else {
-    const mdOps = s.ops.filter(o => o==='mul'||o==='div');
-    return genMD(mdOps[Math.floor(Math.random()*mdOps.length)], s.tables);
+    const mdOps=s.ops.filter(o=>o==='mul'||o==='div');
+    return genMD(mdOps[Math.floor(Math.random()*mdOps.length)],s.tables);
   }
 }
-
-function hasCarry(a,b,op) {
-  if (op==='add') return (a%10)+(b%10)>=10;
-  if (op==='sub') return (a%10)<(b%10);
+function hasCarry(a,b,op){
+  if(op==='add') return (a%10)+(b%10)>=10;
+  if(op==='sub') return (a%10)<(b%10);
   return false;
 }
-
-function genPM(op, maxVal, carry) {
-  let a,b,ans,sym,attempts=0;
+function genPM(op,maxVal,carry){
+  let a,b,ans,sym,att=0;
   do {
-    if (op==='add') { a=randInt(1,maxVal-1); b=randInt(1,maxVal-a); ans=a+b; sym='+'; }
-    else            { a=randInt(2,maxVal); b=randInt(1,a-1); ans=a-b; sym='−'; }
-    const c = hasCarry(a,b,op);
-    if ((carry==='no'&&!c)||(carry==='yes'&&c)||++attempts>300) break;
+    if(op==='add'){a=randInt(1,maxVal-1);b=randInt(1,maxVal-a);ans=a+b;sym='+';}
+    else          {a=randInt(2,maxVal);b=randInt(1,a-1);ans=a-b;sym='−';}
+    const c=hasCarry(a,b,op);
+    if((carry==='no'&&!c)||(carry==='yes'&&c)||++att>300) break;
   } while(true);
-  return { text:`${a} ${sym} ${b} = ?`, answer:ans };
+  return {text:`${a} ${sym} ${b} = ?`,answer:ans};
 }
-
-function genMD(op, tables) {
-  const pool = tables==='easy' ? EASY_TABLES
-             : tables==='medium' ? Array.from({length:10},(_,i)=>i+1)
-             : Array.from({length:20},(_,i)=>i+1);
-  const f = pool[Math.floor(Math.random()*pool.length)];
+function genMD(op,tables){
+  const pool=tables==='easy'?EASY:tables==='medium'?Array.from({length:10},(_,i)=>i+1):Array.from({length:20},(_,i)=>i+1);
+  const f=pool[Math.floor(Math.random()*pool.length)];
   let a,b,ans,sym;
-  if (op==='mul') {
-    b=pool[Math.floor(Math.random()*pool.length)]; a=f; ans=a*b; sym='×';
-  } else {
-    const other=pool[Math.floor(Math.random()*pool.length)];
-    b=f||1; a=b*other; ans=other; sym='÷';
-  }
-  return { text:`${a} ${sym} ${b} = ?`, answer:ans };
+  if(op==='mul'){b=pool[Math.floor(Math.random()*pool.length)];a=f;ans=a*b;sym='×';}
+  else{const o=pool[Math.floor(Math.random()*pool.length)];b=f||1;a=b*o;ans=o;sym='÷';}
+  return {text:`${a} ${sym} ${b} = ?`,answer:ans};
 }
 
-// ── Game logic ──
-function updateRoundCounter() {
-  document.getElementById('round-counter').textContent = `Runde ${totalRounds} / ${maxRounds}`;
+// Game
+function updateRoundCounter(){
+  document.getElementById('round-counter').textContent=`Runde ${totalRounds} / ${maxRounds}`;
 }
-
-function newQuestion(team) {
-  const q = genQuestion(team);
-  answers[team] = q.answer;
-  inputs[team] = '';
-  locked[team] = false;
-  const side = team===0 ? 'blue' : 'red';
-  document.getElementById('q-'+side).textContent = q.text;
-  const ab = document.getElementById('ans-'+side);
-  ab.textContent = '_';
-  ab.className = 'ans-box '+side+'-active';
+function newQuestion(team){
+  const q=genQuestion(team);
+  answers[team]=q.answer; inputs[team]=''; locked[team]=false;
+  const s=team===0?'blue':'red';
+  document.getElementById('q-'+s).textContent=q.text;
+  const ab=document.getElementById('ans-'+s);
+  ab.textContent='_'; ab.className='ans-box '+s+'-active';
 }
-
-document.getElementById('game').addEventListener('click', e => {
-  if (gameOver) return;
-  const btn = e.target.closest('.nb');
-  if (!btn) return;
-  const team = parseInt(btn.dataset.team);
-  if (locked[team]) return;
-  const side = team===0 ? 'blue' : 'red';
-  const ab = document.getElementById('ans-'+side);
-
-  if (btn.dataset.action==='del') {
-    inputs[team] = inputs[team].slice(0,-1);
-    ab.textContent = inputs[team] || '_';
-  } else if (btn.dataset.action==='ok') {
-    if (!inputs[team]) return;
-    checkAnswer(team);
-  } else if (btn.dataset.n!==undefined && inputs[team].length<5) {
-    inputs[team] += btn.dataset.n;
-    ab.textContent = inputs[team];
-  }
+document.getElementById('game').addEventListener('click',e=>{
+  if(gameOver) return;
+  const btn=e.target.closest('.nb'); if(!btn) return;
+  const team=parseInt(btn.dataset.team); if(locked[team]) return;
+  const s=team===0?'blue':'red';
+  const ab=document.getElementById('ans-'+s);
+  if(btn.dataset.action==='del'){inputs[team]=inputs[team].slice(0,-1);ab.textContent=inputs[team]||'_';}
+  else if(btn.dataset.action==='ok'){if(!inputs[team])return;checkAnswer(team);}
+  else if(btn.dataset.n!==undefined&&inputs[team].length<5){inputs[team]+=btn.dataset.n;ab.textContent=inputs[team];}
 });
-
-function checkAnswer(team) {
-  if (locked[team]||gameOver) return;
-  locked[team] = true;
-  const correct = parseInt(inputs[team]) === answers[team];
-  const side = team===0 ? 'blue' : 'red';
-  const ab = document.getElementById('ans-'+side);
-
-  totalRounds++;
-  updateRoundCounter();
-
-  if (correct) {
+function checkAnswer(team){
+  if(locked[team]||gameOver) return;
+  locked[team]=true;
+  const correct=parseInt(inputs[team])===answers[team];
+  const s=team===0?'blue':'red';
+  const ab=document.getElementById('ans-'+s);
+  totalRounds++; updateRoundCounter();
+  if(correct){
     scores[team]++;
-    // Blau (links, team 0) zieht Knoten nach links → ropePos--
-    // Rot  (rechts, team 1) zieht Knoten nach rechts → ropePos++
-    ropePos += (team===0 ? -1 : 1);
-    ab.className = 'ans-box correct';
-    document.getElementById('pts-'+side).textContent = scores[team];
+    ropePos+=(team===0?-1:1);
+    ab.className='ans-box correct';
+    document.getElementById('pts-'+s).textContent=scores[team];
     drawRope();
-
-    if (Math.abs(ropePos) >= 6) {
-      setTimeout(() => showResult(team, 'rope'), 700);
-      return;
-    }
+    if(Math.abs(ropePos)>=6){setTimeout(()=>showResult(team,'rope'),700);return;}
   } else {
-    ab.className = 'ans-box wrong';
+    ab.className='ans-box wrong';
   }
-
-  if (totalRounds >= maxRounds) {
-    setTimeout(() => {
-      const w = scores[0]>scores[1] ? 0 : scores[1]>scores[0] ? 1 : -1;
-      showResult(w, 'rounds');
-    }, 700);
+  if(totalRounds>=maxRounds){
+    setTimeout(()=>{
+      const w=scores[0]>scores[1]?0:scores[1]>scores[0]?1:-1;
+      showResult(w,'rounds');
+    },700);
     return;
   }
-
-  setTimeout(() => newQuestion(team), 700);
+  setTimeout(()=>newQuestion(team),700);
 }
 
-// ── Rope ──
-function drawRope() {
-  const canvas = document.getElementById('rope');
-  const W = canvas.parentElement.offsetWidth;
-  canvas.width = W;
-  const H=44, cx=W/2, ropeY=H/2, half=(W-60)/2;
-  const ctx = canvas.getContext('2d');
+// Rope
+function drawRope(){
+  const canvas=document.getElementById('rope');
+  const wrap=canvas.parentElement;
+  const W=wrap.offsetWidth, H=wrap.offsetHeight||44;
+  canvas.width=W; canvas.height=H;
+  const cx=W/2, ropeY=H/2, half=(W-60)/2;
+  const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,W,H);
-
-  ctx.beginPath(); ctx.moveTo(20,ropeY); ctx.lineTo(W-20,ropeY);
-  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
-
-  for (let i=-6; i<=6; i++) {
-    const x = cx+(i/6)*half;
-    const big = i===0||Math.abs(i)===6;
-    ctx.beginPath();
-    ctx.moveTo(x, ropeY-(big?10:5));
-    ctx.lineTo(x, ropeY+(big?10:5));
-    ctx.strokeStyle = Math.abs(i)===6 ? (i<0?'#2563eb':'#dc2626') : i===0?'#475569':'#cbd5e1';
-    ctx.lineWidth = big ? 2.5 : 1.5;
-    ctx.stroke();
+  ctx.beginPath();ctx.moveTo(20,ropeY);ctx.lineTo(W-20,ropeY);
+  ctx.strokeStyle='#94a3b8';ctx.lineWidth=5;ctx.lineCap='round';ctx.stroke();
+  for(let i=-6;i<=6;i++){
+    const x=cx+(i/6)*half, big=i===0||Math.abs(i)===6;
+    ctx.beginPath();ctx.moveTo(x,ropeY-(big?10:5));ctx.lineTo(x,ropeY+(big?10:5));
+    ctx.strokeStyle=Math.abs(i)===6?(i<0?'#2563eb':'#dc2626'):i===0?'#475569':'#cbd5e1';
+    ctx.lineWidth=big?2.5:1.5;ctx.stroke();
   }
-
-  const knobX = cx+(ropePos/6)*half;
-  ctx.beginPath(); ctx.arc(knobX,ropeY,15,0,Math.PI*2);
-  ctx.fillStyle='white'; ctx.fill();
-  ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=2; ctx.stroke();
-  ctx.beginPath(); ctx.arc(knobX,ropeY,11,0,Math.PI*2);
-  ctx.fillStyle = ropePos<0?'#2563eb':ropePos>0?'#dc2626':'#94a3b8';
-  ctx.fill();
+  const kx=cx+(ropePos/6)*half;
+  ctx.beginPath();ctx.arc(kx,ropeY,15,0,Math.PI*2);ctx.fillStyle='white';ctx.fill();
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.arc(kx,ropeY,11,0,Math.PI*2);
+  ctx.fillStyle=ropePos<0?'#2563eb':ropePos>0?'#dc2626':'#94a3b8';ctx.fill();
 }
-
-window.addEventListener('resize', () => {
-  if (document.getElementById('game').classList.contains('active')) drawRope();
+window.addEventListener('resize',()=>{
+  if(document.getElementById('game').classList.contains('active')) drawRope();
 });
 
-// ── Result ──
-function showResult(winner, reason) {
-  gameOver = true;
-  document.getElementById('sc-pts-blue').textContent = scores[0];
-  document.getElementById('sc-pts-red').textContent  = scores[1];
-  document.getElementById('sc-name-blue').textContent = teamNames[0];
-  document.getElementById('sc-name-red').textContent  = teamNames[1];
-
-  const wn = document.getElementById('winner-name');
-  const rr = document.getElementById('result-reason');
-  document.getElementById('sc-blue').className = 'score-card blue';
-  document.getElementById('sc-red').className  = 'score-card red';
-
-  if (winner===0) {
-    wn.textContent = teamNames[0]; wn.className='winner-name blue';
+// Result
+function showResult(winner,reason){
+  gameOver=true;
+  document.getElementById('sc-pts-blue').textContent=scores[0];
+  document.getElementById('sc-pts-red').textContent=scores[1];
+  document.getElementById('sc-name-blue').textContent=teamNames[0];
+  document.getElementById('sc-name-red').textContent=teamNames[1];
+  const wn=document.getElementById('winner-name');
+  const rr=document.getElementById('result-reason');
+  document.getElementById('sc-blue').className='score-card blue';
+  document.getElementById('sc-red').className='score-card red';
+  if(winner===0){
+    wn.textContent=teamNames[0];wn.className='winner-name blue';
     document.getElementById('sc-blue').className='score-card blue winner';
-    rr.textContent = reason==='rope' ? '6 Felder Vorsprung 🎉' : `Mehr Punkte nach ${maxRounds} Runden`;
-  } else if (winner===1) {
-    wn.textContent = teamNames[1]; wn.className='winner-name red';
+    rr.textContent=reason==='rope'?'6 Felder Vorsprung 🎉':`Mehr Punkte nach ${maxRounds} Runden`;
+  } else if(winner===1){
+    wn.textContent=teamNames[1];wn.className='winner-name red';
     document.getElementById('sc-red').className='score-card red winner';
-    rr.textContent = reason==='rope' ? '6 Felder Vorsprung 🎉' : `Mehr Punkte nach ${maxRounds} Runden`;
+    rr.textContent=reason==='rope'?'6 Felder Vorsprung 🎉':`Mehr Punkte nach ${maxRounds} Runden`;
   } else {
-    wn.textContent='Unentschieden!'; wn.className='winner-name tie';
+    wn.textContent='Unentschieden!';wn.className='winner-name tie';
     rr.textContent=`Gleich viele Punkte nach ${maxRounds} Runden`;
   }
   show('result');
