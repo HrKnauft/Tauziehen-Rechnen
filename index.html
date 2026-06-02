@@ -670,6 +670,7 @@ function startGame() {
   timerSecs = tc ? parseInt(tc.dataset.timer) : 10;
 
   clearTimerInterval();
+  soloCorrect = 0; soloWrong = 0; soloTotal = 0;
 
   if (isSolo) {
     // Solo mode
@@ -692,7 +693,7 @@ function startGame() {
     show('game');
     if (timerOn) { document.getElementById('timer-bar-wrap').style.display = 'block'; }
     else { document.getElementById('timer-bar-wrap').style.display = 'none'; }
-    setTimeout(() => { newQuestion(0); }, 60);
+    setTimeout(() => { newQuestion(0); if(timerOn) startSoloTimer(); }, 60);
   } else {
     // Teams mode
     document.getElementById('panels').className = 'panels two-col';
@@ -707,6 +708,8 @@ function startGame() {
     document.querySelector('#panel-blue .nb.ok').className = 'nb ok blue';
     document.getElementById('hdr-red').textContent = teamNames[1];
     document.getElementById('pt-red').textContent = teamNames[1];
+    document.getElementById('pts-red').textContent = '0';
+    document.getElementById('pts-blue').textContent = '0';
     document.getElementById('win-info').textContent =
       maxLead + ' Felder Vorsprung oder max. ' + maxRounds + ' Runden = Sieg 🏆' +
       (hardMode ? ' · 💀 Schwerer Modus' : '') +
@@ -732,14 +735,9 @@ function startTimer() {
     updateTimerBar();
     if (timerLeft <= 0) {
       clearTimerInterval();
-      // Time up — force wrong for unlocked teams
-      if (isSolo) {
-        if (!locked[0]) { soloWrong++; soloTotal++; newQuestion(0); startSoloTimer(); }
-      } else {
-        if (!locked[0]) { forceWrong(0); }
-        if (!locked[1]) { forceWrong(1); }
-        startTimer();
-      }
+      if (!locked[0]) { forceWrong(0); }
+      if (!locked[1]) { forceWrong(1); }
+      startTimer();
     }
   }, 100);
 }
@@ -777,12 +775,13 @@ function forceWrong(team) {
   locked[team] = true;
   const s = team===0?'blue':'red';
   document.getElementById('ans-'+s).className = 'ans-box wrong';
-  if (hardMode) {
+  if (hardMode && !isSolo) {
     const other = 1-team, os = other===0?'blue':'red';
     scores[other]++;
     ropePos += (other===0?-1:1);
     document.getElementById('pts-'+os).textContent = scores[other];
     drawRope();
+    if(Math.abs(ropePos)>=maxLead){clearTimerInterval();gameOver=true;setTimeout(()=>showTeamResult(other,'rope'),900);return;}
   }
   setTimeout(() => newQuestion(team), 700);
 }
@@ -874,18 +873,18 @@ function checkAnswer(team){
       ab.className='ans-box correct';
       document.getElementById('pts-'+s).textContent=scores[team];
       drawRope();
-      if(Math.abs(ropePos)>=maxLead){clearTimerInterval();setTimeout(()=>showTeamResult(team,'rope'),700);return;}
+      if(Math.abs(ropePos)>=maxLead){clearTimerInterval();gameOver=true;setTimeout(()=>showTeamResult(team,'rope'),700);return;}
     } else {
       ab.className='ans-box wrong';
       if(hardMode){
         scores[other]++; ropePos+=(other===0?-1:1);
         document.getElementById('pts-'+os).textContent=scores[other];
         drawRope();
-        if(Math.abs(ropePos)>=maxLead){clearTimerInterval();setTimeout(()=>showTeamResult(other,'rope'),900);return;}
+        if(Math.abs(ropePos)>=maxLead){clearTimerInterval();gameOver=true;setTimeout(()=>showTeamResult(other,'rope'),900);return;}
       }
     }
     if(totalRounds>=maxRounds){
-      clearTimerInterval();
+      clearTimerInterval();gameOver=true;
       setTimeout(()=>{const w=scores[0]>scores[1]?0:scores[1]>scores[0]?1:-1;showTeamResult(w,'rounds');},700);
       return;
     }
@@ -928,6 +927,7 @@ window.addEventListener('resize',()=>{if(document.getElementById('game').classLi
 
 // ══ Results ══
 function showTeamResult(winner,reason){
+  clearTimerInterval();
   gameOver=true;
   const rs=document.getElementById('result-scores');
   rs.innerHTML=`<div class="score-cards">
@@ -946,6 +946,7 @@ function showTeamResult(winner,reason){
 }
 
 function showSoloResult(){
+  clearTimerInterval();
   gameOver=true;
   const pct=Math.round((soloCorrect/maxRounds)*100);
   const perfect=soloCorrect===maxRounds;
